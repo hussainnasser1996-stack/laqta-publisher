@@ -1,0 +1,88 @@
+{
+ "brand": "Laqta",
+ "brand_ar": "لقطة",
+ "instagram_handle": "@laqtahq",
+ "website": "laqta-booths.com",
+ "timezone": "Asia/Bahrain",
+ "utc_offset": "+03:00",
+ "buffer_api_url": "https://api.buffer.com",
+ "buffer_organization_id": "6b056c3fcb3dd8f243ba9684",
+ "buffer_channels": {
+  "instagram": null,
+  "youtube": "6b05b6e28541f09ecb8c144d",
+  "linkedin": "6b05cd318541f09ecb8d6bce"
+ },
+ "buffer_key_keychain": {
+  "service": "laqta-buffer",
+  "account": "buffer"
+ },
+ "buffer_daily_call_budget": 230,
+ "buffer_daily_call_budget_note": "Buffer free plan allows about 250 API calls per rolling 24 h (GG Economics, 23 Nov 2026). We stop at 230 to leave room for manual checks.",
+ "media_host": {
+  "kind": "github_raw",
+  "kind_options": "github_raw (a PUBLIC repo, like GG's savestate-media) | none. Buffer needs a public https URL for every image and video.",
+  "repo": "hussainnasser1996-stack/laqta-media",
+  "repo_local": "~/Developer/laqta-media",
+  "base_url": "https://raw.githubusercontent.com/hussainnasser1996-stack/laqta-media/main"
+ },
+ "arabic_checker": "~/.claude/skills/arabic-newsroom/scripts/check_arabic.py",
+ "arabic_checker_python": "~/.venvs/camel/bin/python",
+ "max_hashtags": 5,
+ "caption_max_chars": 2200,
+ "visualisation_label": "3D visualisation · تصور ثلاثي الأبعاد",
+ "visualisation_caption_en": [
+  "3d visualisation",
+  "3d model",
+  "drawing"
+ ],
+ "visualisation_caption_ar": [
+  "ثلاثي الأبعاد",
+  "ثلاثية الأبعاد",
+  "مخطط"
+ ],
+ "media_kinds_needing_label": [
+  "render",
+  "drawing"
+ ],
+ "tagline_en": "Make it a Laqta",
+ "tagline_ar": "خلّها لقطة",
+ "sound_logo": {
+  "id": "laqta-ident-final",
+  "full": "assets/brand/capture_10_final.wav",
+  "rule": "Sales/customer videos (pillar 'sale' or post.json end_ident=true) end with the final Laqta ident; optional for other reels. gates.py then requires audio.end_sting = this id and the capture click in the last 4 s.",
+  "min_match": 0.5
+ },
+ "logo_bug": {
+  "template": "assets/brand/logo_bug_coral.png",
+  "source": "branding/Laqta_Brand_Pack_2026-08-19/02_logo/logo_primary_coral.png (cropped to content)",
+  "rule": "Hussain 24 Nov 2026: the Laqta logo is on screen from the first frame to the start of the end ident in every video. gates.py: post.json logo_bug=true AND the template is found (OpenCV, multi-scale) in frames sampled at 0 s, 25%, 50% and 75% of the content (before the end ident).",
+  "min_match": 0.7,
+  "widths_px": [
+   240,
+   256,
+   272,
+   300,
+   330,
+   360,
+   404,
+   420,
+   480,
+   520,
+   560
+  ],
+  "end_ident_s": 5.43
+ },
+ "youtube_channel_id": "UC9RD9IP1f0qWSLGTNOhFE4g",
+ "youtube_handle": "@laqtaco",
+ "youtube_category_id": "22",
+ "youtube_title_max": 60,
+ "youtube_cta": {
+  "en": "Message us on WhatsApp or visit laqta-booths.com",
+  "ar": "راسلنا على واتساب أو زر laqta-booths.com",
+  "note": "YouTube has no DMs: on youtube_short targets the Instagram call to action ('DM us…' / «راسلنا…») is swapped for this line (24 Nov 2026). Instagram keeps 'DM us'."
+ },
+ "linkedin_page": "linkedin.com/company/laqta.co",
+ "linkedin_max_hashtags": 3,
+ "linkedin_doc_title_max": 60,
+ "rules_from_env": true
+}

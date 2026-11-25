@@ -1,0 +1,36 @@
+name: Laqta publish
+# INACTIVE until pushed. Every 2 h: book approved posts due in the next 48 h (CONTROL.md), then check delivery.
+# Nothing books unless CONTROL.md says `mode: auto`, the post is approved, and BUFFER_API_KEY is set.
+on:
+  schedule: [{cron: "17 */2 * * *"}]
+  workflow_dispatch:
+    inputs: { dry: { type: boolean, default: true } }
+concurrency: { group: publish, cancel-in-progress: false }
+permissions: { contents: write }
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -q opencv-python-headless numpy pillow   # gates.py: cv2 + numpy (logo bug, sound logo); tools: Pillow
+      - run: sudo apt-get -qq install -y ffmpeg >/dev/null
+      - name: Media repo (public, PLAN.md decision 4)
+        if: ${{ vars.MEDIA_REPO != '' }}
+        run: |
+          mkdir -p ~/.ssh && printf '%s\n' "$MK" > ~/.ssh/media && chmod 600 ~/.ssh/media
+          echo "GIT_SSH_COMMAND=ssh -i $HOME/.ssh/media -o StrictHostKeyChecking=accept-new" >> $GITHUB_ENV
+          git config --global user.name "Laqta bot" && git config --global user.email "bot@users.noreply.github.com"
+          GIT_SSH_COMMAND="ssh -i $HOME/.ssh/media -o StrictHostKeyChecking=accept-new" git clone -q git@github.com:${{ vars.MEDIA_REPO }}.git "$HOME/Developer/laqta-media"
+        env: { MK: "${{ secrets.MEDIA_DEPLOY_KEY }}" }
+      - run: python3 scripts/run.py ${{ inputs.dry && '--dry' || '' }}
+      - run: python3 scripts/monitor.py
+      - name: Save state
+        run: |
+          git config user.name "Laqta bot" && git config user.email "bot@users.noreply.github.com"
+          git add queue log && git commit -qm "publish run" || exit 0
+          for i in 1 2 3; do git pull -q --rebase -X theirs && git push -q && break; sleep $((i*4)); done

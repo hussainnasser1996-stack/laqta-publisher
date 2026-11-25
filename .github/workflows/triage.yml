@@ -1,0 +1,19 @@
+name: Laqta failure triage
+# INACTIVE until pushed. When a workflow FAILS (not a post: the job itself crashed), retry once if it looks transient.
+# Post-level failures are already recorded by scripts/run.py → log/failures.json; FIXER.md says how a Claude session clears them.
+on:
+  workflow_run:
+    workflows: ["Laqta publish", "Laqta gates"]
+    types: [completed]
+permissions: { actions: write }
+jobs:
+  retry:
+    if: github.event.workflow_run.conclusion == 'failure' && github.event.workflow_run.run_attempt < 2
+    runs-on: ubuntu-latest
+    env: { GH_TOKEN: "${{ github.token }}" }
+    steps:
+      - run: |
+          log=$(gh run view ${{ github.event.workflow_run.id }} -R ${{ github.repository }} --log-failed | tail -60)
+          if echo "$log" | grep -Eiq 'Could not resolve host|timed? ?out|HTTP Error 5[0-9][0-9]|429|rate.?limit|ECONNRESET|non-fast-forward'; then
+            gh run rerun ${{ github.event.workflow_run.id }} -R ${{ github.repository }} --failed
+          else echo "not transient: left for FIXER.md"; fi
