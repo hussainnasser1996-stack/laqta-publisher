@@ -13,6 +13,7 @@ jobs:
     timeout-minutes: 15
     env:
       BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+      LAQTA_RULES: ${{ secrets.LAQTA_RULES }}   # private rule lists (public runner only; see scripts/sync_public.py)
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
