@@ -12,7 +12,7 @@ FAIL on:
     so a Linux runner without the checker can still verify a caption the Mac already passed
   - English caption not humanizer-checked (post.json humanizer.checked + caption_sha must match the current caption)
   - more than 5 hashtags, caption over 2,200 characters
-  - a banned word (Al Aali, العالي, pilot, negotiable, ...) or banned seating claim anywhere in the copy
+  - a banned word (list in config.json, private) or banned seating claim anywhere in the copy
   - a venue named without venue_confirmed_in_writing=true
 WARN (does not block): missing tagline, AI-writing tells in English, reel not 1080x1920 or outside 3-90 s.
 """
