@@ -41,7 +41,7 @@ def load_post(slot):
 
 
 def slots():
-    return sorted(p.name for p in Q.iterdir() if (p / "post.json").exists())
+    return sorted(p.name for p in Q.iterdir() if (p / "post.json").exists()) if Q.exists() else []
 
 
 def due_utc(post):
